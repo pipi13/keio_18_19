@@ -1,5 +1,3 @@
-import json from "./keio_18_19.json" assert { type: "json" };
-
 const array = JSON.parse(json);
 const length = Object.keys(array).length;
 
