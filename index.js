@@ -50,6 +50,7 @@ function Display(column){
 	}else{
 		Hide(column);
 	}
+	if ( column == 1 ){ WriteHTML("info", ""); }
 }
 
 function Blink(column){
