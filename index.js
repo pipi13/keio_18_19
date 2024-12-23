@@ -93,17 +93,8 @@ function Main(){
 	if( 270 < N ){
 		for( i = 0; i < length; i++ ){
 			if( N <= array[i].n ){
-				if( N == array[i].n ){
-					Blink(0);
-				}else{
-					Display(0);
-				}
-				if( N == array[i+1].n ){
-					Blink(1);
-				}else{
-					Display(1);
-				}
-				Display(1);
+				(N == array[i].n) ? Blink(0): Display(0);
+				(N == array[i+1].n) ? Blink(1): Display(1);
 				Display(2);
 				Display(3);
 				Display(4);
