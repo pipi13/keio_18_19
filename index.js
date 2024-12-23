@@ -53,6 +53,10 @@ function Display(column){
 }
 
 function Blink(column){
+	if( Sec == 0){
+		if( array[i+column].dir == 0){new Audio("./sound/up.mp3").play();}
+		if( array[i+column].dir == 1){new Audio("./sound/down.mp3").play();}
+	}
 	const mod = Sec % BlinkInterval;
 	if( mod == 0 ){
 		Display(column);
@@ -93,6 +97,11 @@ function Main(){
 					Blink(0);
 				}else{
 					Display(0);
+				}
+				if( N == array[i+1].n ){
+					Blink(1);
+				}else{
+					Display(1);
 				}
 				Display(1);
 				Display(2);
