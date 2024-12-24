@@ -15,7 +15,8 @@ function WriteDirection(col, dir, la="jp"){
 }
 
 function WriteTime(col, n){
-	const hh = Math.floor( n / 60 );
+	let hh = Math.floor( n / 60 );
+	if(hh >= 24){ hh -= 24 }
 	const mm = ("0" + (n % 60)).slice(-2);
 	WriteSrc("#hh" + col, "./number/" + hh + ".SVG");
 	WriteSrc("#colon"+col, "./number/colon.SVG");
@@ -97,7 +98,7 @@ function Click(){
 
 
 
-test = 0;
+
 
 function Main(){
 
@@ -111,7 +112,7 @@ function Main(){
 
 	const Hour = RealTime.getHours();
 	const Min = RealTime.getMinutes();
-	let N = 298 + test;
+	let N = 0;
 	(Hour >= 1) ? N = Hour * 60 + Min: N = ( Hour + 24 ) * 60 + Min;
 
 	if( 270 < N && N <= a[length - 1].n ){
@@ -130,7 +131,6 @@ function Main(){
 		WriteHTML("info", "◆本日の運転は終了しました◆");
 		document.querySelector("#info").style.color = "#f43";
 	}
-	test += 1;
 }
 
 setInterval(Main,1000);

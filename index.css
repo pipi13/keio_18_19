@@ -55,10 +55,15 @@ hr {
 	width: 16vw;
 	text-align: center;
 	display: flex;
+	justify-content: center;
 }
 
 .num {
-	height: 12.5vh;
+	width: 7vw;
+}
+
+.colon{
+	width: 2vw;
 }
 
 .type {
