@@ -114,7 +114,7 @@ function Main(){
 	let N = 298 + test;
 	(Hour >= 1) ? N = Hour * 60 + Min: N = ( Hour + 24 ) * 60 + Min;
 
-	if( 270 < N ){
+	if( 270 < N && N <= a[length - 1].n ){
 		for( i = 0; i < length; i++ ){
 			if( N <= a[i].n ){
 
