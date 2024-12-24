@@ -23,12 +23,15 @@ hr {
 .header {
 	height: 9vh;
 	background: #333;
-	font-size: 4vh;
+	font-size: 3.5vh;
 	display: flex;
 	align-items: flex-end;
 	justify-content: space-around;
 }
 
+.eng {
+	font-size: 2vh;
+}
 
 .column {
 	margin:1vh 0 1vh 0;
@@ -43,12 +46,20 @@ hr {
 	text-align: center;
 }
 
-
-.time {
-	width: 20vw;
+.time_h {
+	width: 16vw;
 	text-align: center;
 }
 
+.time {
+	width: 16vw;
+	text-align: center;
+	display: flex;
+}
+
+.num {
+	height: 12.5vh;
+}
 
 .type {
 	width: 21.75vw;
@@ -57,25 +68,41 @@ hr {
 
 
 .dst{
-	width: 40.5vw;
+	width: 50vw;
 	text-align: center;
 }
 
 
 .footer {
 	position: fixed;
-	bottom: 2px;
+	bottom: 0;
 	margin: 0;
-	width: 100vw; height: 1vh;
+	width: 100vw; height: 3vh;
 	font-size: 1vh;
 	display: flex;
+	align-items: flex-end;
 }
 
 .sign {
-	margin-left: 2px;
+	margin-left: 0.5vw;
 }
 
 .realtime {
 	margin-left: auto;
-	margin-right: 2px;
+	margin-right: 1vw;
+}
+
+
+button {
+	width: 3vh;
+	height: 3vh;
+	border: 0;
+	padding: 0;
+	background: #000;
+}
+
+
+#button {
+	width: 100%;
+	height: 100%;
 }

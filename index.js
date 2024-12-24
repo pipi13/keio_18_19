@@ -1,6 +1,3 @@
-const array = JSON.parse(json);
-const length = Object.keys(array).length;
-
 function WriteHTML(id, contents){
 	document.getElementById(id).innerHTML = contents;
 }
@@ -11,91 +8,118 @@ function WriteSrc(id, url){
 
 
 
-function Hide(column){
-	const dirID = "#dir" + column;
-	const typeID = "#type" + column;
-	WriteSrc(dirID, "");
-	WriteHTML("time"+column, "");
-	WriteSrc(typeID, "");
-	WriteHTML("dst"+column, "");
+
+
+function WriteDirection(col, dir, la="jp"){
+	WriteSrc("#dir" + col, "./direction/" + dir + "_" + la + ".SVG");
 }
 
-function Display(column){
-	if( i+column < length ){
-		const dirID = "#dir" + column;
-		if(array[i+column].dir == 0){ WriteSrc(dirID, "./direction/up.SVG"); }
-		if(array[i+column].dir == 1){ WriteSrc(dirID, "./direction/down.SVG"); }
+function WriteTime(col, n){
+	const hh = Math.floor( n / 60 );
+	const mm = ("0" + (n % 60)).slice(-2);
+	WriteSrc("#hh" + col, "./number/" + hh + ".SVG");
+	WriteSrc("#colon"+col, "./number/colon.SVG");
+	WriteSrc("#mm" + col, "./number/" + mm + ".SVG");
+}
 
-		WriteHTML("time"+column, array[i+column].time);
+function WriteType(col, type, la="jp"){
+	const mod = Math.floor( Sec / SwitchInterval ) % 2;
+	if(type <= 4){ WriteSrc("#type" + col , "./type/" + type + "_" + la + ".SVG"); }
+	if(type == 5 || type == 6){ WriteSrc("#type" + col , "./type/" + type + ".SVG"); }
+	if(type == 30 || type == 40){ 
+		if(mod == 0){ WriteSrc("#type" + col , "./type/" + type / 10 + "_" + la + ".SVG"); }
+		else		{ WriteSrc("#type" + col , "./type/ko29_" + la + ".SVG"); }
+	}
+}
 
-		const typeID = "#type" + column;
-		if(array[i+column].type == 0){ WriteSrc(typeID, "./type/local.SVG"); }
-		if(array[i+column].type == 1){ WriteSrc(typeID, "./type/rapid.SVG"); }
-		if(array[i+column].type == 2){ WriteSrc(typeID, "./type/semi.SVG"); }
-		if(array[i+column].type == 3){ WriteSrc(typeID, "./type/express.SVG"); }				
-		if(array[i+column].type == 4){ WriteSrc(typeID, "./type/special.SVG"); }
-		if(array[i+column].type == 5){ WriteSrc(typeID, "./type/liner.SVG"); }
-		if(array[i+column].type == 6){ WriteSrc(typeID, "./type/takao.SVG"); }
-		const mod = Math.floor( Sec / SwitchInterval ) % 2;
-		if(array[i+column].type == 30){
-			if( mod == 0 ){ WriteSrc(typeID, "./type/express.SVG"); }
-			if( mod == 1 ){ WriteSrc(typeID, "./type/takahatafudo.SVG"); } 
+function WriteDestination(col, dst, la="jp"){
+	WriteSrc("#dst" + col, "./destination/" + dst + "_" + la + ".SVG");
+}
+
+
+
+
+
+function Display(col){
+	if(i+col < length){
+		const mod = Math.floor( Sec / SwitchInterval / 2 ) % 2;
+		if( mod == 0 ){
+			WriteDirection(col, a[i+col].dir)
+			WriteTime(col, a[i+col].n)
+			WriteType(col, a[i+col].type)
+			WriteDestination(col, a[i+col].dst)
+		}else{
+			WriteDirection(col, a[i+col].dir, "en")
+			WriteTime(col, a[i+col].n)
+			WriteType(col, a[i+col].type, "en")
+			WriteDestination(col, a[i+col].dst, "en")
 		}
-		if(array[i+column].type == 40){
-			if( mod == 0 ){ WriteSrc(typeID, "./type/special.SVG"); }
-			if( mod == 1 ){ WriteSrc(typeID, "./type/takahatafudo.SVG"); } 
-		}
-
-		WriteHTML("dst"+column, array[i+column].dst);
 	}else{
-		Hide(column);
+		Hide(col);
 	}
-	if ( column == 1 ){ WriteHTML("info", ""); }
+	if(col == 0){ WriteHTML("info", ""); }
 }
 
-function Blink(column){
-	if( Sec == 0){
-		if( array[i+column].dir == 0){new Audio("./sound/up.mp3").play();}
-		if( array[i+column].dir == 1){new Audio("./sound/down.mp3").play();}
-	}
+function Blink(col){
 	const mod = Sec % BlinkInterval;
-	if( mod == 0 ){
-		Display(column);
+	if(mod == 0){
+		Display(col);
 		WriteHTML("info", "電車がきます。ご注意ください。");
 		document.querySelector("#info").style.color = "#f43";
 	}else{
-		Hide(column);
+		Hide(col);
 		WriteHTML("info", "");
+	}
+	if(Sec == 0 && Sound == 1){
+		new Audio("./sound/" + a[i+col].dir + ".mp3").play();
 	}
 }
 
+function Hide(col){
+	WriteSrc("#dir"+col, "");
+	WriteSrc("#hh"+col, "");
+	WriteSrc("#colon"+col, "");
+	WriteSrc("#mm"+col, "");
+	WriteSrc("#type"+col, "");
+	WriteSrc("#dst"+col, "");
+}
 
+
+
+
+
+let Sound = 0;
+
+function Click(){
+	(Sound == 0) ? Sound = 1: Sound = 0;
+	WriteSrc("#button", "./icon/" + Sound + ".SVG");
+}
+
+
+
+test = 0;
 
 function Main(){
 
 	const RealTime = new Date();
-	const Hour = RealTime.getHours();
-	const Min = RealTime.getMinutes();
 	Sec = RealTime.getSeconds();
 	BlinkInterval = 2;
 	SwitchInterval = 7.5;
-
-	if( Hour >= 1 ){
-		var N = Hour * 60 + Min;
-	}else{
-		var N = ( Hour + 24 ) * 60 + Min;
-	}
 	
-	//var N = 1460;
-
 	const TimeStr = RealTime.toLocaleTimeString('ja-JP', {hour12:false});
 	WriteHTML("realtime",TimeStr);
 
+	const Hour = RealTime.getHours();
+	const Min = RealTime.getMinutes();
+	let N = 298 + test;
+	(Hour >= 1) ? N = Hour * 60 + Min: N = ( Hour + 24 ) * 60 + Min;
+
 	if( 270 < N ){
 		for( i = 0; i < length; i++ ){
-			if( N <= array[i].n ){
-				(N == array[i].n) ? Blink(0): Display(0);
-				(N == array[i+1].n) ? Blink(1): Display(1);
+			if( N <= a[i].n ){
+
+				(N == a[i].n) ? Blink(0): Display(0);
+				(N == a[i+1].n) ? Blink(1): Display(1);
 				Display(2);
 				Display(3);
 				Display(4);
@@ -106,8 +130,7 @@ function Main(){
 		WriteHTML("info", "◆本日の運転は終了しました◆");
 		document.querySelector("#info").style.color = "#f43";
 	}
+	test += 1;
 }
-
-
 
 setInterval(Main,1000);
